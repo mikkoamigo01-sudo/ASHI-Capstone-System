@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../img/ashi.jpg" type="image/x-icon">
+<title>Ashi Amaya — Admin · Subjects</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── TOKENS (mirror admin.css light/dark) ── */
+:root {
+  --accent:           #111111;
+  --content-bg:       #f7f7f7;
+  --card-bg:          #ffffff;
+  --border:           #e5e5e5;
+  --text-primary:     #111111;
+  --text-secondary:   #665665;
+  --text-muted:       #999999;
+  --shadow:           0 1px 4px rgba(0,0,0,.08);
+  --radius:           8px;
+  --topbar-bg:        #ffffff;
+  --table-head-bg:    #f9f9f9;
+  --table-row-even:   #fdfdfd;
+  --table-row-hover:  #fafafa;
+  --input-bg:         #ffffff;
+
+  /* semantic */
+  --clr-blue:         #2563eb;
+  --clr-blue-d:       #1d4ed8;
+  --clr-blue-pale:    #eff4ff;
+  --clr-green:        #16a34a;
+  --clr-green-pale:   #f0fdf4;
+  --clr-amber:        #d97706;
+  --clr-amber-pale:   #fffbeb;
+  --clr-red:          #dc2626;
+  --clr-red-d:        #b91c1c;
+  --clr-red-pale:     #fef2f2;
+}
+
+[data-theme="dark"] {
+  --accent:           #ffffff;
+  --content-bg:       #141414;
+  --card-bg:          #1e1e1e;
+  --border:           #2e2e2e;
+  --text-primary:     #f0f0f0;
+  --text-secondary:   #aaaaaa;
+  --text-muted:       #665665;
+  --shadow:           0 1px 4px rgba(0,0,0,.4);
+  --topbar-bg:        #1a1a1a;
+  --table-head-bg:    #242424;
+  --table-row-even:   #1c1c1c;
+  --table-row-hover:  #252525;
+  --input-bg:         #252525;
+
+  --clr-blue-pale:    rgba(37,99,235,.15);
+  --clr-green-pale:   rgba(22,163,74,.12);
+  --clr-amber-pale:   rgba(217,119,6,.12);
+  --clr-red-pale:     rgba(220,38,38,.12);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--content-bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  font-size: 14px;
+  transition: background .3s, color .3s;
+}
+
+/* ══════════════════════════════════════════
+   TOPBAR
+══════════════════════════════════════════ */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--topbar-bg);
+  border-bottom: 1px solid var(--border);
+  height: 60px;
+  display: flex; align-items: center;
+  padding: 0 32px; gap: 14px;
+  transition: background .3s;
+}
+
+.topbar-brand {
+  font-size: 17px; font-weight: 700;
+  color: var(--text-primary); letter-spacing: .5px;
+  display: flex; align-items: center; gap: 8px;
+  text-decoration: none;
+}
+
+.topbar-breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  color: var(--text-muted); font-size: 13px;
+}
+.topbar-breadcrumb .icon { font-size: 14px; }
+.topbar-breadcrumb span { color: var(--text-secondary); font-weight: 500; }
+
+.topbar-spacer { flex: 1; }
+
+.topbar-sy {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--table-head-bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 12px; font-weight: 500;
+  color: var(--text-secondary);
+  transition: background .3s;
+}
+
+.q-pill {
+  background: var(--text-primary);
+  color: var(--content-bg);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px; font-weight: 600;
+  transition: background .3s, color .3s;
+}
+
+/* ══════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════ */
+.main { max-width: 1280px; margin: 0 auto; padding: 32px 32px; }
+
+/* ══════════════════════════════════════════
+   PAGE HEADER
+══════════════════════════════════════════ */
+.page-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; margin-bottom: 22px; flex-wrap: wrap;
+}
+.page-title {
+  font-size: 18px; font-weight: 700;
+  color: var(--text-primary); letter-spacing: -.3px;
+  display: flex; align-items: center; gap: 8px;
+}
+.page-title .icon { font-size: 20px; color: var(--text-muted); }
+.page-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.page-actions { display: flex; align-items: center; gap: 10px; }
+
+/* ══════════════════════════════════════════
+   STAT CHIPS  (replaces stat-grid for this page)
+══════════════════════════════════════════ */
+.stat-chips { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+
+.stat-chip {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: var(--shadow);
+  min-width: 150px;
+  transition: background .3s;
+}
+
+.stat-chip-icon {
+  width: 36px; height: 36px; border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.stat-chip-icon.blue  { background: var(--clr-blue-pale);  color: var(--clr-blue); }
+.stat-chip-icon.green { background: var(--clr-green-pale); color: var(--clr-green); }
+.stat-chip-icon.amber { background: var(--clr-amber-pale); color: var(--clr-amber); }
+.stat-chip-icon.red   { background: var(--clr-red-pale);   color: var(--clr-red); }
+
+.stat-chip-val  { font-size: 22px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+.stat-chip-lbl  { font-size: 11px; font-weight: 600; color: var(--text-muted);
+                  text-transform: uppercase; letter-spacing: .7px; margin-top: 2px; }
+
+/* ══════════════════════════════════════════
+   FILTERS PANEL  (replaces .toolbar)
+══════════════════════════════════════════ */
+.filters-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;
+  transition: background .3s;
+}
+
+.filter-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 140px; }
+.filter-group.search { flex: 2.5; min-width: 220px; }
+
+.filter-label {
+  font-size: 10px; font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .8px;
+}
+
+.filter-input,
+.filter-select {
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 11px;
+  font-size: 13px; font-weight: 400;
+  color: var(--text-primary);
+  font-family: 'Poppins', sans-serif;
+  background: var(--input-bg);
+  outline: none;
+  transition: background .3s, border-color .15s;
+}
+.filter-input:focus,
+.filter-select:focus { border-color: #999; }
+
+.search-wrap { position: relative; }
+.search-wrap .icon {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  font-size: 14px; color: var(--text-muted); pointer-events: none;
+}
+.search-wrap .filter-input { padding-left: 32px; width: 100%; }
+
+.filter-actions { display: flex; gap: 8px; align-items: flex-end; }
+
+/* ══════════════════════════════════════════
+   BUTTONS  (admin.css style)
+══════════════════════════════════════════ */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 36px; padding: 0 14px;
+  border-radius: var(--radius);
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer; border: none; white-space: nowrap;
+  transition: background .15s, color .15s, opacity .15s;
+}
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn .icon { font-size: 15px; }
+
+.btn-primary  { background: var(--text-primary); color: var(--content-bg); }
+.btn-primary:hover:not(:disabled) { opacity: .85; }
+
+.btn-outline  { background: var(--card-bg); color: var(--text-primary); border: 1px solid var(--border); }
+.btn-outline:hover:not(:disabled) { background: var(--table-row-hover); border-color: #aaa; }
+
+.btn-danger   { background: var(--card-bg); color: #c0392b; border: 1px solid #f5c6c6; }
+.btn-danger:hover:not(:disabled) { background: #fff5f5; }
+
+.btn-success  { background: var(--card-bg); color: #2d6a4f; border: 1px solid #b7e4c7; }
+.btn-success:hover:not(:disabled) { background: var(--clr-green-pale); }
+
+.btn-warning  { background: var(--card-bg); color: var(--clr-amber); border: 1px solid #fcd34d; }
+.btn-warning:hover:not(:disabled) { background: var(--clr-amber-pale); }
+
+/* ── small variant ── */
+.btn-sm { height: 30px; padding: 0 10px; font-size: 11px; }
+
+/* ── xs variant (drawer actions) ── */
+.btn-xs {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 28px; padding: 0 10px;
+  border-radius: var(--radius);
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px; font-weight: 500;
+  cursor: pointer; border: none; white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+.btn-xs:disabled { opacity: .45; cursor: not-allowed; }
+.btn-xs .icon { font-size: 13px; }
+
+.btn-xs-primary { background: var(--clr-blue-pale); color: var(--clr-blue); border: 1px solid #bfdbfe; }
+.btn-xs-primary:hover:not(:disabled) { background: #dbeafe; }
+
+.btn-xs-danger  { background: var(--card-bg); color: var(--clr-red); border: 1px solid #fecaca; }
+.btn-xs-danger:hover:not(:disabled)  { background: var(--clr-red-pale); }
+
+/* ── reactivate-all (drawer header) ── */
+.btn-reactivate-all {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 14px;
+  border-radius: var(--radius);
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer;
+  background: var(--card-bg); color: #2d6a4f;
+  border: 1px solid #b7e4c7;
+  transition: background .15s;
+}
+.btn-reactivate-all:hover:not(:disabled) { background: var(--clr-green-pale); }
+.btn-reactivate-all:disabled { opacity: .45; cursor: not-allowed; }
+.btn-reactivate-all .icon { font-size: 15px; }
+
+/* ══════════════════════════════════════════
+   TABLE CARD
+══════════════════════════════════════════ */
+.table-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: background .3s;
+}
+
+.table-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  gap: 12px; flex-wrap: wrap;
+}
+.table-toolbar-left { display: flex; align-items: center; gap: 10px; }
+
+.table-count { font-size: 12px; color: var(--text-muted); }
+.table-count strong { color: var(--text-primary); }
+
+.selected-badge {
+  display: none;
+  background: var(--clr-blue-pale); color: var(--clr-blue);
+  border-radius: 20px; padding: 2px 10px;
+  font-size: 11px; font-weight: 500;
+}
+.selected-badge.visible { display: inline-flex; align-items: center; gap: 4px; }
+
+/* ── table base (inherits admin.css patterns) ── */
+.table-scroll { overflow-x: auto; }
+
+table { width: 100%; border-collapse: collapse; }
+
+thead { background: var(--table-head-bg); border-bottom: 2px solid var(--border); }
+
+th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 10px; font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: .6px;
+  white-space: nowrap;
+}
+th.center { text-align: center; }
+th.check-col { width: 44px; }
+
+td { padding: 10px 14px; font-size: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+td.center { text-align: center; }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--table-row-hover); }
+tbody tr:nth-child(even) { background: var(--table-row-even); }
+tbody tr:nth-child(even):hover { background: var(--table-row-hover); }
+tbody tr.selected { background: var(--clr-blue-pale); }
+
+/* ── subject cell ── */
+.td-subject { display: flex; align-items: center; gap: 10px; }
+.subject-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.subject-name { font-weight: 500; color: var(--text-primary); font-size: 12.5px; }
+.subject-code {
+  font-size: 10px; color: var(--text-muted);
+  background: var(--table-head-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px; padding: 1px 6px; margin-top: 2px;
+  display: inline-block;
+}
+
+/* ── teacher cell ── */
+.td-teacher { display: flex; align-items: center; gap: 8px; }
+.teacher-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; color: var(--text-secondary); flex-shrink: 0;
+}
+
+/* ── pills ── */
+.grade-pill {
+  display: inline-block;
+  background: var(--table-head-bg); border: 1px solid var(--border);
+  border-radius: 20px; padding: 2px 10px;
+  font-size: 11px; font-weight: 500; color: var(--text-secondary); white-space: nowrap;
+}
+.section-pill {
+  display: inline-block;
+  background: var(--clr-green-pale); border: 1px solid #bbf7d0;
+  border-radius: 20px; padding: 2px 10px;
+  font-size: 11px; font-weight: 500; color: #2d6a4f; white-space: nowrap;
+}
+
+/* ── count badge ── */
+.count-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--text-secondary); font-weight: 500;
+}
+.count-badge .icon { font-size: 13px; color: var(--text-muted); }
+
+/* ── checkbox ── */
+.cb-wrap { display: flex; justify-content: center; }
+input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; accent-color: var(--accent); }
+
+/* ══════════════════════════════════════════
+   EMPTY / LOADING STATES
+══════════════════════════════════════════ */
+.loading-row td { text-align: center; padding: 48px; color: var(--text-muted); }
+
+.spinner {
+  display: inline-block; width: 26px; height: 26px;
+  border: 3px solid var(--border); border-top-color: var(--accent);
+  border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-state { text-align: center; padding: 60px 24px; color: var(--text-muted); }
+.empty-state .e-icon { font-size: 36px; margin-bottom: 12px; opacity: .4; }
+.empty-state p { font-size: 13px; }
+
+/* ══════════════════════════════════════════
+   PAGINATION
+══════════════════════════════════════════ */
+.pagination-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-top: 1px solid var(--border);
+  gap: 12px; flex-wrap: wrap;
+  background: var(--card-bg);
+  transition: background .3s;
+}
+.pagination-info { font-size: 12px; color: var(--text-muted); }
+.pagination-controls { display: flex; align-items: center; gap: 4px; }
+
+.page-btn {
+  min-width: 30px; height: 30px; padding: 0 8px;
+  border-radius: var(--radius); border: 1px solid var(--border);
+  background: var(--card-bg); color: var(--text-secondary);
+  font-size: 12px; font-family: 'Poppins', sans-serif; font-weight: 500;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, border-color .15s;
+}
+.page-btn:hover:not(:disabled):not(.active) { background: var(--table-row-hover); border-color: #aaa; }
+.page-btn.active { background: var(--text-primary); color: var(--content-bg); border-color: var(--text-primary); }
+.page-btn:disabled { opacity: .4; cursor: not-allowed; }
+.page-btn .icon { font-size: 14px; }
+
+.per-page-wrap { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+.per-page-wrap select {
+  height: 28px; border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 0 6px; font-size: 12px; font-family: 'Poppins', sans-serif;
+  color: var(--text-primary); background: var(--input-bg); outline: none; cursor: pointer;
+  transition: background .3s;
+}
+
+/* ══════════════════════════════════════════
+   MODAL  (admin.css style)
+══════════════════════════════════════════ */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 1000; align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--card-bg);
+  border-radius: 10px;
+  width: 460px; max-width: 95vw; max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  animation: fadeUp .2s ease;
+  transition: background .3s;
+}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.modal-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-icon {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  background: var(--clr-red-pale); color: var(--clr-red);
+}
+.modal-icon.warning { background: var(--clr-amber-pale); color: var(--clr-amber); }
+.modal-icon.success { background: var(--clr-green-pale); color: var(--clr-green); }
+
+.modal-title    { font-size: 15px; font-weight: 700; }
+.modal-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+.modal-body { padding: 20px 22px; }
+.modal-body p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+.modal-body p strong { color: var(--text-primary); }
+
+.modal-info {
+  background: var(--clr-red-pale); border: 1px solid #fecaca;
+  border-radius: var(--radius); padding: 11px 14px; margin-top: 14px;
+  font-size: 12px; color: var(--clr-red); line-height: 1.6;
+}
+.modal-info.warning { background: var(--clr-amber-pale); border-color: #fcd34d; color: #92400e; }
+.modal-info.success { background: var(--clr-green-pale); border-color: #bbf7d0; color: #14532d; }
+.modal-info ul { padding-left: 16px; margin-top: 5px; }
+.modal-info li { margin-bottom: 3px; }
+
+.modal-footer {
+  padding: 4px 22px 20px;
+  display: flex; justify-content: flex-end; gap: 8px;
+}
+
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+.toast-container {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  z-index: 9999;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  pointer-events: none;
+}
+.toast {
+  background: var(--accent); color: var(--content-bg);
+  padding: 10px 18px; border-radius: var(--radius);
+  font-size: 13px; font-family: 'Poppins', sans-serif; font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  display: flex; align-items: center; gap: 8px;
+  pointer-events: all;
+  animation: toastIn .22s ease;
+  max-width: 380px;
+}
+.toast.success { background: #14532d; }
+.toast.error   { background: var(--clr-red-d); }
+@keyframes toastIn  { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ══════════════════════════════════════════
+   ERROR BANNER
+══════════════════════════════════════════ */
+.error-banner {
+  background: var(--clr-red-pale); border: 1px solid #fecaca;
+  border-radius: var(--radius); padding: 11px 14px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--clr-red); margin-bottom: 16px;
+}
+.error-banner .icon { font-size: 16px; }
+
+/* ══════════════════════════════════════════
+   DRAWER
+══════════════════════════════════════════ */
+.drawer-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 400;
+  animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: 680px; max-width: 96vw;
+  background: var(--card-bg);
+  border-left: 1px solid var(--border);
+  box-shadow: -6px 0 24px rgba(0,0,0,.12);
+  z-index: 500;
+  display: flex; flex-direction: column;
+  animation: drawerIn .22s ease;
+  transition: background .3s;
+}
+@keyframes drawerIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+.drawer-header {
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.drawer-header-left  { display: flex; align-items: center; gap: 10px; }
+.drawer-header-right { display: flex; align-items: center; gap: 8px; }
+
+.drawer-title { font-size: 15px; font-weight: 600; }
+
+/* badge — matches admin .badge style */
+.drawer-badge {
+  display: inline-block; padding: 2px 8px;
+  border-radius: 20px; font-size: 11px; font-weight: 500;
+  background: var(--clr-red-pale); color: var(--clr-red);
+}
+
+.drawer-close {
+  width: 30px; height: 30px;
+  background: var(--text-primary); color: var(--card-bg);
+  border: none; border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  transition: opacity .15s;
+}
+.drawer-close:hover { opacity: .8; }
+
+.drawer-notice {
+  padding: 10px 22px;
+  background: var(--clr-amber-pale); border-bottom: 1px solid #fde68a;
+  font-size: 12px; color: #92400e;
+  display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0;
+}
+.drawer-notice .icon { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+
+.drawer-body   { flex: 1; overflow-y: auto; }
+
+.drawer-loading {
+  display: flex; align-items: center; justify-content: center;
+  padding: 60px; flex-direction: column; gap: 12px;
+  color: var(--text-muted); font-size: 13px;
+}
+.drawer-empty {
+  display: flex; align-items: center; justify-content: center;
+  padding: 60px; flex-direction: column; gap: 10px;
+  color: var(--text-muted);
+}
+.drawer-empty .e-icon { font-size: 36px; opacity: .4; margin-bottom: 4px; }
+.drawer-empty p { font-size: 13px; }
+
+/* ══════════════════════════════════════════
+   DEACTIVATED ROWS  (inside drawer)
+══════════════════════════════════════════ */
+.deact-row {
+  border-bottom: 1px solid var(--border);
+  padding: 16px 22px;
+  transition: background .15s;
+}
+.deact-row:last-child { border-bottom: none; }
+.deact-row:hover { background: var(--table-row-hover); }
+
+.deact-row-top {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+}
+.deact-row-left  { flex: 1; min-width: 0; }
+.deact-row-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+
+.deact-name-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.deact-name { font-size: 13.5px; font-weight: 600; color: var(--text-primary); }
+.deact-code {
+  font-size: 10px; background: var(--table-head-bg);
+  border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px;
+  color: var(--text-muted);
+}
+.deact-meta    { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.deact-actions { display: flex; gap: 6px; margin-top: 8px; }
+.deact-deactivated-on { font-size: 11px; color: var(--text-muted); }
+
+/* purge countdown */
+.purge-days-label { font-size: 12px; font-weight: 600; }
+.purge-days-label.critical { color: var(--clr-red); }
+.purge-days-label.warning  { color: var(--clr-amber); }
+.purge-days-label.safe     { color: var(--clr-green); }
+.purge-days-label.done     { color: var(--text-muted); }
+
+.purge-bar { width: 96px; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.purge-bar-fill { height: 100%; border-radius: 3px; transition: width .3s; }
+
+/* ── content preview inside deact-row ── */
+.content-preview {
+  margin-top: 10px;
+  background: var(--table-head-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 12px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5px 16px;
+  transition: background .3s;
+}
+.cp-item  { display: flex; justify-content: space-between; align-items: center; }
+.cp-label { font-size: 11px; color: var(--text-muted); }
+.cp-val   { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+.cp-val.purged { color: var(--text-muted); text-decoration: line-through; }
+.cp-val.kept   { color: var(--clr-green); }
+
+.purged-notice {
+  margin-top: 8px; grid-column: 1/-1;
+  font-size: 11px; color: var(--text-muted); font-style: italic;
+  padding-top: 6px; border-top: 1px solid var(--border);
+}
+
+/* ══════════════════════════════════════════
+   SCROLLBAR  (admin.css style)
+══════════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #bbb; }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .main { padding: 20px 16px; }
+  .stat-chips { gap: 8px; }
+  .stat-chip  { min-width: 120px; }
+  .filters-panel { gap: 10px; }
+  .filter-group { min-width: 100%; }
+  table { font-size: 12px; }
+  td, th { padding: 9px 10px; }
+  .drawer { width: 100vw; }
+  .content-preview { grid-template-columns: 1fr; }
+  .drawer-header { flex-wrap: wrap; gap: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <a href="#" class="topbar-brand">Ashi<span class="topbar-brand-dot">.</span>Amaya</a>
+  <div class="topbar-breadcrumb">
+    <span class="material-icons-round">chevron_right</span>
+    <span>Admin</span>
+    <span class="material-icons-round">chevron_right</span>
+  </div>
+  <div class="topbar-spacer"></div>
+  <div class="topbar-sy">
+    <span class="material-icons-round">calendar_today</span>
+    <span id="topbarSY">—</span>
+  </div>
+  <div class="q-pill" id="topbarQ">Q—</div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-title-group">
+      <div class="page-title">
+        <span class="material-icons-round">class</span>
+        Subjects &amp; Grades
+      </div>
+      <div class="page-subtitle">All active subjects across all teachers — current school year</div>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-warning" id="deactivatedDrawerBtn" onclick="openDrawer()">
+        <span class="material-icons-round">inventory_2</span>
+        Deactivated
+        <span id="deactivatedCountBadge" style="display:none;background:var(--warning);color:#fff;border-radius:20px;padding:1px 7px;font-size:11px;margin-left:2px;">0</span>
+      </button>
+      <button class="btn btn-ghost" onclick="loadSubjects()">
+        <span class="material-icons-round">refresh</span> Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- STAT CHIPS -->
+  <div class="stat-chips">
+    <div class="stat-chip">
+      <div class="stat-chip-icon blue"><span class="material-icons-round">class</span></div>
+      <div>
+        <div class="stat-chip-val" id="statTotal">—</div>
+        <div class="stat-chip-lbl">Total Subjects</div>
+      </div>
+    </div>
+    <div class="stat-chip">
+      <div class="stat-chip-icon green"><span class="material-icons-round">people</span></div>
+      <div>
+        <div class="stat-chip-val" id="statStudents">—</div>
+        <div class="stat-chip-lbl">Total Students</div>
+      </div>
+    </div>
+    <div class="stat-chip">
+      <div class="stat-chip-icon amber"><span class="material-icons-round">person</span></div>
+      <div>
+        <div class="stat-chip-val" id="statTeachers">—</div>
+        <div class="stat-chip-lbl">Teachers</div>
+      </div>
+    </div>
+    <div class="stat-chip">
+      <div class="stat-chip-icon red"><span class="material-icons-round">assignment</span></div>
+      <div>
+        <div class="stat-chip-val" id="statAssignments">—</div>
+        <div class="stat-chip-lbl">Assignments</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERROR BANNER -->
+  <div class="error-banner" id="errorBanner" style="display:none">
+    <span class="material-icons-round">error_outline</span>
+    <span id="errorBannerMsg">Something went wrong.</span>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters-panel">
+    <div class="filter-group search">
+      <label class="filter-label">Search</label>
+      <div class="search-wrap">
+        <span class="material-icons-round">search</span>
+        <input class="filter-input" type="text" id="filterSearch"
+               placeholder="Subject name, code, teacher…"
+               oninput="onFilterChange()">
+      </div>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label">Grade Level</label>
+      <select class="filter-select" id="filterGrade" onchange="onFilterChange()">
+        <option value="">All Grades</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label">Section</label>
+      <select class="filter-select" id="filterSection" onchange="onFilterChange()">
+        <option value="">All Sections</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label">Teacher</label>
+      <select class="filter-select" id="filterTeacher" onchange="onFilterChange()">
+        <option value="">All Teachers</option>
+      </select>
+    </div>
+    <div class="filter-actions">
+      <button class="btn btn-ghost" onclick="clearFilters()">
+        <span class="material-icons-round">filter_alt_off</span> Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- TABLE CARD -->
+  <div class="table-card">
+    <div class="table-toolbar">
+      <div class="table-toolbar-left">
+        <span class="table-count">
+          Showing <strong id="showingCount">0</strong> of <strong id="totalCount">0</strong> subjects
+        </span>
+        <span class="selected-badge" id="selectedBadge">
+          <span class="material-icons-round" style="font-size:13px">check_circle</span>
+          <span id="selectedCount">0</span> selected
+        </span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-danger" id="deactivateAllBtn" onclick="openDeactivateModal()" disabled>
+          <span class="material-icons-round">block</span>
+          Deactivate All in List
+        </button>
+      </div>
+    </div>
+
+    <div class="table-scroll">
+      <table id="subjectsTable">
+        <thead>
+          <tr>
+            <th class="check-col center">
+              <div class="cb-wrap">
+                <input type="checkbox" id="checkAll" onchange="toggleCheckAll(this)">
+              </div>
+            </th>
+            <th>Subject</th>
+            <th>Teacher</th>
+            <th>Grade Level</th>
+            <th>Section</th>
+            <th class="center">Students</th>
+            <th class="center">Assignments</th>
+            <th class="center">Quizzes</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr class="loading-row">
+            <td colspan="8"><div class="spinner"></div><br><br>Loading subjects…</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-bar">
+      <div class="per-page-wrap">
+        Rows per page:
+        <select id="perPageSelect" onchange="onPerPageChange()">
+          <option value="10">10</option>
+          <option value="25" selected>25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+      <div class="pagination-info" id="paginationInfo">Page 1 of 1</div>
+      <div class="pagination-controls" id="paginationControls"></div>
+    </div>
+  </div>
+</main>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ══════════════════════════════════════════
+     DEACTIVATE ALL MODAL
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="deactivateModal" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon"><span class="material-icons-round">block</span></div>
+      <div>
+        <div class="modal-title">Deactivate subjects?</div>
+        <div class="modal-subtitle" id="modalSubtitle">This will deactivate all subjects in the current filtered list.</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <p>You are about to deactivate <strong id="modalCount">0</strong> subject(s). This will affect all enrolled students and teachers.</p>
+      <div class="modal-info">
+        <strong>What happens:</strong>
+        <ul>
+          <li>Students lose access immediately</li>
+          <li>All content (assignments, quizzes, materials) becomes read-only</li>
+          <li>After <strong>30 days</strong>, content &amp; files are permanently deleted</li>
+          <li><strong>Titles are kept</strong> (like Google Classroom archive)</li>
+          <li>Subjects can be reactivated within the 30-day window</li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('deactivateModal')">Cancel</button>
+      <button class="btn btn-danger" id="confirmDeactivateBtn" onclick="confirmDeactivate()">
+        <span class="material-icons-round">block</span> Deactivate
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     REACTIVATE SINGLE MODAL
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="reactivateModal" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon success">
+        <span class="material-icons-round">restore</span>
+      </div>
+      <div>
+        <div class="modal-title">Reactivate subject?</div>
+        <div class="modal-subtitle" id="reactivateModalSubtitle">This subject will be restored to active.</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <p id="reactivateModalBody">Students and teachers will regain access. All content that has not yet been purged will be restored.</p>
+      <div class="modal-info warning" id="reactivatePurgedWarning" style="display:none">
+        <strong>Note:</strong> Some content was already purged after 30 days. Titles are still intact but files, submissions, and responses cannot be recovered.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('reactivateModal')">Cancel</button>
+      <button class="btn btn-primary" id="confirmReactivateBtn" onclick="confirmReactivate()">
+        <span class="material-icons-round">restore</span> Reactivate
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     REACTIVATE ALL MODAL
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="reactivateAllModal" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon success">
+        <span class="material-icons-round">restore</span>
+      </div>
+      <div>
+        <div class="modal-title">Reactivate all deactivated subjects?</div>
+        <div class="modal-subtitle" id="reactivateAllSubtitle">All subjects in the deactivated list will be restored.</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <p>You are about to reactivate <strong id="reactivateAllCount">0</strong> subject(s). Students and teachers will regain access immediately.</p>
+      <div class="modal-info success">
+        <strong>What happens:</strong>
+        <ul>
+          <li>Students regain access immediately</li>
+          <li>All content not yet purged will be fully restored</li>
+          <li>Subject status returns to <strong>active</strong></li>
+          <li>30-day purge timer is cancelled</li>
+        </ul>
+      </div>
+      <div class="modal-info warning" id="reactivateAllPurgeWarning" style="display:none;margin-top:10px;">
+        <strong>Note:</strong> Some subjects have already had content purged after 30 days. Their titles are intact but files, submissions, and responses cannot be recovered.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('reactivateAllModal')">Cancel</button>
+      <button class="btn btn-success" id="confirmReactivateAllBtn" onclick="confirmReactivateAll()">
+        <span class="material-icons-round">restore</span> Reactivate All
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FORCE DELETE MODAL
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="forceDeleteModal" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon"><span class="material-icons-round">delete_forever</span></div>
+      <div>
+        <div class="modal-title">Force delete now?</div>
+        <div class="modal-subtitle" id="forceDeleteSubtitle">This skips the 30-day window entirely.</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <p>You are about to <strong>permanently delete</strong> all content for <strong id="forceDeleteSubjectName">this subject</strong>. This cannot be undone.</p>
+      <div class="modal-info">
+        <strong>Permanently deleted immediately:</strong>
+        <ul>
+          <li>All assignment files &amp; submissions</li>
+          <li>All quiz responses &amp; attempts</li>
+          <li>All materials &amp; uploaded files</li>
+          <li>All announcement content &amp; comments</li>
+        </ul>
+      </div>
+      <div class="modal-info warning" style="margin-top:10px">
+        <strong>Kept forever:</strong> Subject title, teacher, grade level, section, and class code are preserved.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('forceDeleteModal')">Cancel</button>
+      <button class="btn btn-danger" id="confirmForceDeleteBtn" onclick="confirmForceDelete()">
+        <span class="material-icons-round">delete_forever</span> Delete Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     DEACTIVATED SUBJECTS DRAWER
+══════════════════════════════════════════ -->
+<div class="drawer-overlay" id="drawerOverlay" style="display:none" onclick="closeDrawer()"></div>
+<div class="drawer" id="deactivatedDrawer" style="display:none">
+  <div class="drawer-header">
+    <div class="drawer-header-left">
+      <span class="material-icons-round" style="color:var(--warning);font-size:20px">inventory_2</span>
+      <span class="drawer-title">Deactivated Subjects</span>
+      <span class="drawer-badge" id="drawerBadge">0</span>
+    </div>
+    <div class="drawer-header-right">
+      <button class="btn-reactivate-all" id="reactivateAllBtn" onclick="openReactivateAllModal()" disabled>
+        <span class="material-icons-round">restore</span>
+        Reactivate All
+      </button>
+      <button class="drawer-close" onclick="closeDrawer()">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+  </div>
+  <div class="drawer-notice">
+    <span class="material-icons-round">info</span>
+    Titles, teacher, grade, and section are <strong>&nbsp;always kept&nbsp;</strong> — like Google Classroom archive. Only content, files, and responses are deleted after 30 days.
+  </div>
+  <div class="drawer-body" id="drawerBody">
+    <div class="drawer-loading">
+      <div class="spinner"></div>
+      <span>Loading deactivated subjects…</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let allSubjects  = [];
+let filtered     = [];
+let paginated    = [];
+let selectedIds  = new Set();
+
+let currentPage  = 1;
+let perPage      = 25;
+let schoolYear   = '—';
+let currentQ     = 1;
+
+let fSearch = '', fGrade = '', fSection = '', fTeacher = '';
+let debounceTimer = null;
+
+// Modal pending state
+let pendingReactivateId    = null;
+let pendingForceDeleteId   = null;
+let pendingForceDeleteName = '';
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => loadSubjects());
+
+// ============================================================
+// LOAD ACTIVE SUBJECTS
+// ============================================================
+async function loadSubjects() {
+  setLoading();
+  hideError();
+  try {
+    const res  = await fetch('admin_subjects.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'get_all_subjects' })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    if (data.success) {
+      allSubjects = data.subjects      || [];
+      schoolYear  = data.school_year   || '—';
+      currentQ    = data.current_quarter ?? 1;
+      updateTopbar();
+      populateFilterOptions();
+      updateStats(data.stats || {});
+      applyFilters();
+      if (data.deactivated_count !== undefined) {
+        updateDeactivatedBadge(data.deactivated_count);
+      }
+    } else {
+      showError(data.message || 'Failed to load subjects.');
+    }
+  } catch (err) {
+    showError('Failed to connect to server. Please refresh.');
+    console.error(err);
+  }
+}
+
+function updateDeactivatedBadge(count) {
+  const badge = document.getElementById('deactivatedCountBadge');
+  if (count > 0) {
+    badge.textContent = count;
+    badge.style.display = 'inline-block';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+// ============================================================
+// TOPBAR / STATS
+// ============================================================
+function updateTopbar() {
+  document.getElementById('topbarSY').textContent = schoolYear;
+  document.getElementById('topbarQ').textContent  = `Q${currentQ}`;
+}
+
+function updateStats(stats) {
+  document.getElementById('statTotal').textContent       = stats.total_subjects    ?? allSubjects.length;
+  document.getElementById('statStudents').textContent    = stats.total_students    ?? '—';
+  document.getElementById('statTeachers').textContent    = stats.total_teachers    ?? '—';
+  document.getElementById('statAssignments').textContent = stats.total_assignments ?? '—';
+}
+
+// ============================================================
+// FILTER DROPDOWNS
+// ============================================================
+function populateFilterOptions() {
+  const grades   = [...new Set(allSubjects.map(s => s.grade).filter(Boolean))].sort();
+  const sections = [...new Set(allSubjects.map(s => s.section).filter(Boolean))].sort();
+  const teachers = [...new Set(allSubjects.map(s => s.teacher_name).filter(Boolean))].sort();
+  fillSelect('filterGrade',   grades,   'All Grades');
+  fillSelect('filterSection', sections, 'All Sections');
+  fillSelect('filterTeacher', teachers, 'All Teachers');
+}
+
+function fillSelect(id, items, placeholder) {
+  const sel = document.getElementById(id);
+  const cur = sel.value;
+  sel.innerHTML = `<option value="">${placeholder}</option>`;
+  items.forEach(item => {
+    const opt = document.createElement('option');
+    opt.value = item; opt.textContent = item;
+    if (item === cur) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+// ============================================================
+// FILTERS
+// ============================================================
+function onFilterChange() {
+  fSearch  = document.getElementById('filterSearch').value.trim().toLowerCase();
+  fGrade   = document.getElementById('filterGrade').value;
+  fSection = document.getElementById('filterSection').value;
+  fTeacher = document.getElementById('filterTeacher').value;
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    currentPage = 1;
+    selectedIds.clear();
+    applyFilters();
+  }, 220);
+}
+
+function clearFilters() {
+  document.getElementById('filterSearch').value  = '';
+  document.getElementById('filterGrade').value   = '';
+  document.getElementById('filterSection').value = '';
+  document.getElementById('filterTeacher').value = '';
+  fSearch = fGrade = fSection = fTeacher = '';
+  currentPage = 1;
+  selectedIds.clear();
+  applyFilters();
+}
+
+function applyFilters() {
+  filtered = allSubjects.filter(s => {
+    const search  = fSearch === '' || [s.subject_name, s.class_code, s.teacher_name, s.grade, s.section].some(v => v && v.toLowerCase().includes(fSearch));
+    const grade   = !fGrade   || s.grade        === fGrade;
+    const section = !fSection || s.section      === fSection;
+    const teacher = !fTeacher || s.teacher_name === fTeacher;
+    return search && grade && section && teacher;
+  });
+  renderTable();
+  renderPagination();
+  updateDeactivateBtn();
+}
+
+// ============================================================
+// RENDER TABLE
+// ============================================================
+function renderTable() {
+  const start = (currentPage - 1) * perPage;
+  paginated   = filtered.slice(start, start + perPage);
+
+  document.getElementById('showingCount').textContent = filtered.length;
+  document.getElementById('totalCount').textContent   = allSubjects.length;
+
+  const tbody = document.getElementById('tableBody');
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr><td colspan="8">
+        <div class="empty-state">
+          <span class="material-icons-round">search_off</span>
+          <p>No subjects match your filters.</p>
+        </div>
+      </td></tr>`;
+    document.getElementById('checkAll').checked = false;
+    return;
+  }
+
+  tbody.innerHTML = paginated.map(s => {
+    const checked = selectedIds.has(s.id) ? 'checked' : '';
+    const initial = s.teacher_name ? s.teacher_name.charAt(0).toUpperCase() : '?';
+    const color   = s.theme_color  || '#2563eb';
+    return `
+      <tr id="row-${s.id}" class="${selectedIds.has(s.id) ? 'selected' : ''}">
+        <td class="center"><div class="cb-wrap"><input type="checkbox" ${checked} onchange="toggleRow(${s.id}, this)"></div></td>
+        <td>
+          <div class="td-subject">
+            <div class="subject-dot" style="background:${escHtml(color)}"></div>
+            <div>
+              <div class="subject-name">${escHtml(s.subject_name)}</div>
+              <span class="subject-code">${escHtml(s.class_code)}</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="td-teacher">
+            <div class="teacher-avatar">${escHtml(initial)}</div>
+            ${escHtml(s.teacher_name || '—')}
+          </div>
+        </td>
+        <td><span class="grade-pill">${escHtml(s.grade || '—')}</span></td>
+        <td><span class="section-pill">${escHtml(s.section || '—')}</span></td>
+        <td class="center"><span class="count-badge"><span class="material-icons-round">group</span>${parseInt(s.student_count)||0}</span></td>
+        <td class="center"><span class="count-badge"><span class="material-icons-round">assignment</span>${parseInt(s.assignment_count)||0}</span></td>
+        <td class="center"><span class="count-badge"><span class="material-icons-round">quiz</span>${parseInt(s.quiz_count)||0}</span></td>
+      </tr>`;
+  }).join('');
+
+  const allOnPage = paginated.every(s => selectedIds.has(s.id));
+  document.getElementById('checkAll').checked = paginated.length > 0 && allOnPage;
+  document.getElementById('checkAll').indeterminate = !allOnPage && paginated.some(s => selectedIds.has(s.id));
+}
+
+// ============================================================
+// PAGINATION
+// ============================================================
+function renderPagination() {
+  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+  document.getElementById('paginationInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+
+  const ctrl  = document.getElementById('paginationControls');
+  const pages = getPageNumbers(currentPage, totalPages);
+  let html = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}><span class="material-icons-round">chevron_left</span></button>`;
+  pages.forEach(p => {
+    if (p === '…') html += `<span style="padding:0 4px;color:var(--text-3)">…</span>`;
+    else html += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
+  });
+  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}><span class="material-icons-round">chevron_right</span></button>`;
+  ctrl.innerHTML = html;
+}
+
+function getPageNumbers(cur, total) {
+  if (total <= 7) return Array.from({length: total}, (_, i) => i+1);
+  if (cur <= 4) return [1,2,3,4,5,'…',total];
+  if (cur >= total-3) return [1,'…',total-4,total-3,total-2,total-1,total];
+  return [1,'…',cur-1,cur,cur+1,'…',total];
+}
+
+function goPage(p) {
+  const totalPages = Math.ceil(filtered.length / perPage) || 1;
+  if (p < 1 || p > totalPages) return;
+  currentPage = p;
+  renderTable();
+  renderPagination();
+}
+
+function onPerPageChange() {
+  perPage = parseInt(document.getElementById('perPageSelect').value);
+  currentPage = 1;
+  selectedIds.clear();
+  renderTable();
+  renderPagination();
+  updateDeactivateBtn();
+}
+
+// ============================================================
+// CHECKBOXES
+// ============================================================
+function toggleCheckAll(cb) {
+  paginated.forEach(s => { if (cb.checked) selectedIds.add(s.id); else selectedIds.delete(s.id); });
+  renderTable();
+  updateDeactivateBtn();
+}
+
+function toggleRow(id, cb) {
+  if (cb.checked) selectedIds.add(id); else selectedIds.delete(id);
+  const row = document.getElementById(`row-${id}`);
+  if (row) row.classList.toggle('selected', cb.checked);
+  const allOnPage = paginated.every(s => selectedIds.has(s.id));
+  document.getElementById('checkAll').checked = allOnPage && paginated.length > 0;
+  document.getElementById('checkAll').indeterminate = !allOnPage && paginated.some(s => selectedIds.has(s.id));
+  updateDeactivateBtn();
+}
+
+function updateDeactivateBtn() {
+  const count = filtered.length;
+  const btn   = document.getElementById('deactivateAllBtn');
+  btn.disabled = count === 0;
+  btn.innerHTML = `<span class="material-icons-round">block</span> Deactivate All in List (${count})`;
+  const badge = document.getElementById('selectedBadge');
+  if (selectedIds.size > 0) { badge.classList.add('visible'); document.getElementById('selectedCount').textContent = selectedIds.size; }
+  else { badge.classList.remove('visible'); }
+}
+
+// ============================================================
+// DEACTIVATE ALL MODAL
+// ============================================================
+function openDeactivateModal() {
+  const count = filtered.length;
+  if (count === 0) return;
+  document.getElementById('modalCount').textContent = count;
+  const hasFilters = fSearch || fGrade || fSection || fTeacher;
+  document.getElementById('modalSubtitle').textContent = hasFilters
+    ? `Deactivating ${count} subject(s) matching current filters.`
+    : `Deactivating all ${count} active subject(s).`;
+  document.getElementById('deactivateModal').style.display = 'flex';
+}
+
+async function confirmDeactivate() {
+  const btn = document.getElementById('confirmDeactivateBtn');
+  btn.disabled = true;
+  btn.innerHTML = `<span class="material-icons-round">hourglass_empty</span> Deactivating…`;
+  const ids = filtered.map(s => s.id);
+  try {
+    const res  = await fetch('admin_subjects.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'bulk_deactivate', subject_ids: ids })
+    });
+    const data = await res.json();
+    closeModal('deactivateModal');
+    if (data.success) {
+      showToast(data.message, 'success');
+      selectedIds.clear();
+      await loadSubjects();
+    } else {
+      showToast(data.message || 'Deactivation failed.', 'error');
+    }
+  } catch (err) {
+    showToast('Something went wrong.', 'error');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<span class="material-icons-round">block</span> Deactivate`;
+  }
+}
+
+// ============================================================
+// DRAWER — OPEN / CLOSE
+// ============================================================
+function openDrawer() {
+  document.getElementById('drawerOverlay').style.display = 'block';
+  document.getElementById('deactivatedDrawer').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  loadDeactivatedSubjects();
+}
+
+function closeDrawer() {
+  document.getElementById('drawerOverlay').style.display = 'none';
+  document.getElementById('deactivatedDrawer').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// ============================================================
+// DRAWER — LOAD DATA
+// ============================================================
+async function loadDeactivatedSubjects() {
+  const body = document.getElementById('drawerBody');
+  body.innerHTML = `<div class="drawer-loading"><div class="spinner"></div><span>Loading…</span></div>`;
+
+  // Disable Reactivate All while loading
+  document.getElementById('reactivateAllBtn').disabled = true;
+
+  try {
+    const res  = await fetch('admin_subjects.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'get_deactivated_subjects' })
+    });
+    const data = await res.json();
+
+    if (!data.success) {
+      body.innerHTML = `<div class="drawer-loading" style="color:var(--danger)">${escHtml(data.message)}</div>`;
+      return;
+    }
+
+    const subjects = data.subjects || [];
+    document.getElementById('drawerBadge').textContent = subjects.length;
+    updateDeactivatedBadge(subjects.length);
+
+    // Enable/disable Reactivate All based on count
+    document.getElementById('reactivateAllBtn').disabled = subjects.length === 0;
+
+    if (subjects.length === 0) {
+      body.innerHTML = `
+        <div class="drawer-empty">
+          <span class="material-icons-round">check_circle</span>
+          <p>No deactivated subjects.</p>
+        </div>`;
+      return;
+    }
+
+    body.innerHTML = subjects.map(s => renderDeactivatedRow(s)).join('');
+
+  } catch (err) {
+    body.innerHTML = `<div class="drawer-loading" style="color:var(--danger)">Failed to load. Please try again.</div>`;
+    document.getElementById('reactivateAllBtn').disabled = true;
+    console.error(err);
+  }
+}
+
+// ============================================================
+// DRAWER — RENDER ROW
+// ============================================================
+function renderDeactivatedRow(s) {
+  const daysLeft = parseInt(s.days_until_purge ?? 30);
+  const isPurged = s.content_purged == 1 || daysLeft <= 0;
+  const pct      = isPurged ? 100 : Math.round(((30 - daysLeft) / 30) * 100);
+  const color    = s.theme_color || '#2563eb';
+
+  let daysLabel, daysClass, barColor;
+  if (isPurged) {
+    daysLabel = 'Content purged'; daysClass = 'done'; barColor = '#16a34a';
+  } else if (daysLeft <= 3) {
+    daysLabel = `${daysLeft} day${daysLeft===1?'':'s'} left`; daysClass = 'critical'; barColor = '#dc2626';
+  } else if (daysLeft <= 10) {
+    daysLabel = `${daysLeft} days left`; daysClass = 'warning'; barColor = '#d97706';
+  } else {
+    daysLabel = `${daysLeft} days left`; daysClass = 'safe'; barColor = '#16a34a';
+  }
+
+  const deactivatedOn = s.archived_at ? formatDate(s.archived_at) : '—';
+  const assignCount   = parseInt(s.assignment_count)    || 0;
+  const quizCount     = parseInt(s.quiz_count)          || 0;
+  const matCount      = parseInt(s.material_count)      || 0;
+  const annCount      = parseInt(s.announcement_count)  || 0;
+  const stuCount      = parseInt(s.student_count)       || 0;
+
+  return `
+  <div class="deact-row" id="deact-row-${s.id}">
+    <div class="deact-row-top">
+      <div class="deact-row-left">
+        <div class="deact-name-line">
+          <div class="subject-dot" style="background:${escHtml(color)}"></div>
+          <span class="deact-name">${escHtml(s.subject_name)}</span>
+          <span class="deact-code">${escHtml(s.class_code)}</span>
+        </div>
+        <div class="deact-meta">
+          ${escHtml(s.teacher_name || '—')} · ${escHtml(s.grade || '—')} · ${escHtml(s.section || '—')} · ${stuCount} student${stuCount===1?'':'s'}
+        </div>
+      </div>
+      <div class="deact-row-right">
+        <span class="purge-days-label ${daysClass}">${escHtml(daysLabel)}</span>
+        <div class="purge-bar"><div class="purge-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
+        <span class="deact-deactivated-on">Deactivated ${escHtml(deactivatedOn)}</span>
+      </div>
+    </div>
+
+    <div class="content-preview">
+      <div class="cp-item">
+        <span class="cp-label">Assignments</span>
+        <span class="cp-val ${isPurged?'purged':''}">${assignCount} ${isPurged?'(purged)':'(files deleted on purge)'}</span>
+      </div>
+      <div class="cp-item">
+        <span class="cp-label">Quizzes</span>
+        <span class="cp-val ${isPurged?'purged':''}">${quizCount} ${isPurged?'(purged)':'(responses deleted on purge)'}</span>
+      </div>
+      <div class="cp-item">
+        <span class="cp-label">Materials</span>
+        <span class="cp-val ${isPurged?'purged':''}">${matCount} ${isPurged?'(purged)':'(files deleted on purge)'}</span>
+      </div>
+      <div class="cp-item">
+        <span class="cp-label">Announcements</span>
+        <span class="cp-val ${isPurged?'purged':''}">${annCount} ${isPurged?'(purged)':'(content deleted on purge)'}</span>
+      </div>
+      <div class="cp-item" style="grid-column:1/-1">
+        <span class="cp-label">Always kept</span>
+        <span class="cp-val kept">Title · Teacher · Grade · Section · Code ✓</span>
+      </div>
+    </div>
+
+    <div class="deact-actions">
+      <button class="btn-xs btn-xs-primary" onclick="openReactivateModal(${s.id}, '${escAttr(s.subject_name)}', ${isPurged?1:0})">
+        <span class="material-icons-round">restore</span> Reactivate
+      </button>
+      <button class="btn-xs btn-xs-danger" onclick="openForceDeleteModal(${s.id}, '${escAttr(s.subject_name)}')">
+        <span class="material-icons-round">delete_forever</span> Force delete now
+      </button>
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// REACTIVATE SINGLE MODAL
+// ============================================================
+function openReactivateModal(id, name, isPurged) {
+  pendingReactivateId = id;
+  document.getElementById('reactivateModalSubtitle').textContent = `"${name}" will be restored to active.`;
+  document.getElementById('reactivatePurgedWarning').style.display = isPurged ? 'block' : 'none';
+  document.getElementById('reactivateModal').style.display = 'flex';
+}
+
+async function confirmReactivate() {
+  const btn = document.getElementById('confirmReactivateBtn');
+  btn.disabled = true;
+  btn.innerHTML = `<span class="material-icons-round">hourglass_empty</span> Reactivating…`;
+  try {
+    const res  = await fetch('admin_subjects.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'reactivate', subject_id: pendingReactivateId })
+    });
+    const data = await res.json();
+    closeModal('reactivateModal');
+    if (data.success) {
+      showToast(data.message, 'success');
+      await loadDeactivatedSubjects();
+      await loadSubjects();
+    } else {
+      showToast(data.message || 'Reactivation failed.', 'error');
+    }
+  } catch (err) {
+    showToast('Something went wrong.', 'error');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<span class="material-icons-round">restore</span> Reactivate`;
+  }
+}
+
+// ============================================================
+// REACTIVATE ALL MODAL
+// ============================================================
+function openReactivateAllModal() {
+  const rows = document.querySelectorAll('[id^="deact-row-"]');
+  const count = rows.length;
+  if (count === 0) return;
+
+  document.getElementById('reactivateAllCount').textContent = count;
+
+  // Check if any subject has already been purged
+  const hasPurged = document.querySelectorAll('.purge-days-label.done').length > 0;
+  document.getElementById('reactivateAllPurgeWarning').style.display = hasPurged ? 'block' : 'none';
+
+  document.getElementById('reactivateAllSubtitle').textContent =
+    `All ${count} deactivated subject(s) will be restored to active.`;
+
+  document.getElementById('reactivateAllModal').style.display = 'flex';
+}
+
+async function confirmReactivateAll() {
+  const btn = document.getElementById('confirmReactivateAllBtn');
+  btn.disabled = true;
+  btn.innerHTML = `<span class="material-icons-round">hourglass_empty</span> Reactivating…`;
+  try {
+    const res  = await fetch('admin_subjects.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'bulk_reactivate' })
+    });
+    const data = await res.json();
+    closeModal('reactivateAllModal');
+    if (data.success) {
+      showToast(data.message, 'success');
+      document.getElementById('reactivateAllBtn').disabled = true;
+      await loadDeactivatedSubjects();
+      await loadSubjects();
+    } else {
+      showToast(data.message || 'Reactivation failed.', 'error');
+    }
+  } catch (err) {
+    showToast('Something went wrong.', 'error');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<span class="material-icons-round">restore</span> Reactivate All`;
+  }
+}
+
+// ============================================================
+// FORCE DELETE MODAL
+// ============================================================
+function openForceDeleteModal(id, name) {
+  pendingForceDeleteId   = id;
+  pendingForceDeleteName = name;
+  document.getElementById('forceDeleteSubjectName').textContent = `"${name}"`;
+  document.getElementById('forceDeleteSubtitle').textContent    = `"${name}" — content deleted immediately.`;
+  document.getElementById('forceDeleteModal').style.display = 'flex';
+}
+
+async function confirmForceDelete() {
+  const btn = document.getElementById('confirmForceDeleteBtn');
+  btn.disabled = true;
+  btn.innerHTML = `<span class="material-icons-round">hourglass_empty</span> Deleting…`;
+  try {
+    const res  = await fetch('admin_subjects.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'force_delete', subject_id: pendingForceDeleteId })
+    });
+    const data = await res.json();
+    closeModal('forceDeleteModal');
+    if (data.success) {
+      showToast(data.message, 'success');
+      await loadDeactivatedSubjects();
+    } else {
+      showToast(data.message || 'Force delete failed.', 'error');
+    }
+  } catch (err) {
+    showToast('Something went wrong.', 'error');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<span class="material-icons-round">delete_forever</span> Delete Now`;
+  }
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+// Close modals on overlay click
+['deactivateModal','reactivateModal','reactivateAllModal','forceDeleteModal'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => {
+    if (e.target === document.getElementById(id)) closeModal(id);
+  });
+});
+
+// ============================================================
+// LOADING / ERROR
+// ============================================================
+function setLoading() {
+  document.getElementById('tableBody').innerHTML = `
+    <tr class="loading-row"><td colspan="8"><div class="spinner"></div><br><br>Loading subjects…</td></tr>`;
+  document.getElementById('paginationControls').innerHTML = '';
+  document.getElementById('paginationInfo').textContent   = '';
+}
+
+function showError(msg) {
+  document.getElementById('errorBannerMsg').textContent = msg;
+  document.getElementById('errorBanner').style.display  = 'flex';
+  document.getElementById('tableBody').innerHTML = '';
+}
+
+function hideError() { document.getElementById('errorBanner').style.display = 'none'; }
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, type = '') {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className   = `toast ${type}`;
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => {
+    t.style.animation = 'toastOut .3s ease forwards';
+    setTimeout(() => t.remove(), 300);
+  }, 3500);
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function escHtml(str) {
+  if (!str && str !== 0) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(str) {
+  if (!str) return '';
+  return String(str).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+}
+function formatDate(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,636 @@
+/* Teacher Subjects Section - Enhanced Minimalistic Design */
+
+.teacher-subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 28px;
+    padding: 24px 0;
+}
+
+.teacher-subjects-empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: #64748b;
+}
+
+.teacher-subjects-empty-state i {
+    font-size: 72px;
+    color: #e2e8f0;
+    margin-bottom: 20px;
+    opacity: 0.6;
+}
+
+.teacher-subjects-empty-state h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #334155;
+}
+
+.teacher-subjects-empty-state p {
+    font-size: 15px;
+    color: #94a3b8;
+    line-height: 1.6;
+}
+
+/* Subject Card */
+.teacher-subject-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    border: 1px solid #f1f5f9;
+}
+
+.teacher-subject-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+    border-color: #e2e8f0;
+}
+
+.teacher-subject-card.subject-disabled {
+    opacity: 0.5;
+    filter: grayscale(70%);
+}
+
+.teacher-subject-card.subject-disabled:hover {
+    transform: translateY(-2px);
+}
+
+/* Banner with Wave Pattern */
+.teacher-subject-card-banner {
+    padding: 28px 24px;
+    color: white;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 120px;
+    overflow: hidden;
+}
+
+/* Animated Wave Pattern Overlay */
+.teacher-subject-card-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        url("data:image/svg+xml,%3Csvg width='1200' height='120' viewBox='0 0 1200 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 60 Q 150 20, 300 60 T 600 60 T 900 60 T 1200 60 V120 H0 Z' fill='rgba(255,255,255,0.08)' /%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg width='1200' height='120' viewBox='0 0 1200 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 80 Q 200 40, 400 80 T 800 80 T 1200 80 V120 H0 Z' fill='rgba(255,255,255,0.05)' /%3E%3C/svg%3E");
+    background-size: 1200px 120px, 1400px 120px;
+    background-position: 0 bottom, 0 bottom;
+    background-repeat: repeat-x;
+    opacity: 0.7;
+    pointer-events: none;
+    animation: waveAnimation 15s ease-in-out infinite, waveAnimation2 20s ease-in-out infinite;
+}
+
+@keyframes waveAnimation {
+    0%, 100% {
+        background-position: 0 bottom, 0 bottom;
+    }
+    50% {
+        background-position: 300px bottom, -200px bottom;
+    }
+}
+
+@keyframes waveAnimation2 {
+    0%, 100% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Subtle Curved Lines */
+.teacher-subject-card-banner::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+}
+
+.teacher-subject-card-banner img {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: white;
+    padding: 8px;
+    object-fit: contain;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+
+.teacher-subject-banner-info {
+    flex: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.teacher-subject-banner-info strong {
+    display: block;
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+.teacher-subject-banner-info small {
+    font-size: 13px;
+    opacity: 0.85;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+}
+
+/* Menu Dropdown - UPDATED for body-level rendering */
+.teacher-subject-menu {
+    position: relative;
+    cursor: pointer;
+    font-size: 22px;
+    padding: 6px 10px;
+    user-select: none;
+    align-self: flex-start;
+    z-index: 3;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.teacher-subject-menu:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.teacher-subject-menu-dropdown {
+    position: fixed;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+    min-width: 180px;
+    overflow: hidden;
+    z-index: 9999;
+    border: 1px solid #f1f5f9;
+}
+
+.teacher-subject-menu-dropdown.hidden {
+    display: none;
+}
+
+.teacher-subject-menu-item {
+    padding: 14px 18px;
+    color: #475569;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.teacher-subject-menu-item:hover {
+    background: #f8fafc;
+    color: #1e293b;
+}
+
+.teacher-subject-menu-item.menu-highlight {
+    color: #10b981;
+}
+
+.teacher-subject-menu-item.menu-highlight:hover {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.teacher-subject-menu-item.menu-danger {
+    color: #ef4444;
+}
+
+.teacher-subject-menu-item.menu-danger:hover {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.teacher-subject-menu-item.menu-disabled {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.teacher-subject-menu-item i {
+    width: 18px;
+    font-size: 15px;
+}
+
+/* Card Body */
+.teacher-subject-card-body {
+    padding: 24px;
+}
+
+.teacher-subject-info-cards {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.teacher-subject-info-item {
+    flex: 1;
+    background: #f8fafc;
+    padding: 14px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #64748b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+    border: 1px solid #f1f5f9;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.teacher-subject-info-item:hover {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+.teacher-subject-info-item i {
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+.teacher-subject-section-area {
+    background: #f8fafc;
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 22px;
+    border: 1px solid #f1f5f9;
+}
+
+.teacher-subject-section-area strong {
+    display: block;
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.teacher-subject-section-area p {
+    font-size: 14px;
+    color: #1e293b;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Action Buttons */
+.teacher-subject-card-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.teacher-subject-floating-btn {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.teacher-subject-floating-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 8px 28px rgba(37, 99, 235, 0.45);
+}
+
+.teacher-subject-floating-btn:active {
+    transform: scale(0.96);
+}
+
+/* Modal */
+.teacher-subject-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.teacher-subject-modal.hidden {
+    display: none;
+}
+
+.teacher-subject-modal-content {
+    background: white;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 36px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.teacher-subject-modal-content h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 28px;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+}
+
+/* Form Styles */
+.teacher-subject-form-group {
+    margin-bottom: 22px;
+}
+
+.teacher-subject-form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 10px;
+}
+
+.teacher-subject-form-group .form-required {
+    color: #ef4444;
+    margin-left: 2px;
+}
+
+.teacher-subject-form-group input[type="text"],
+.teacher-subject-form-group input:not([type="file"]):not([type="checkbox"]),
+.teacher-subject-form-group select {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.2s;
+    background: #ffffff;
+    color: #1e293b;
+}
+
+.teacher-subject-form-group input:focus,
+.teacher-subject-form-group select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+}
+
+.teacher-subject-form-group input::placeholder {
+    color: #94a3b8;
+}
+
+.teacher-subject-form-group input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #f8fafc;
+    font-size: 14px;
+}
+
+.teacher-subject-form-group input[type="file"]:hover {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+
+/* Color Options */
+.teacher-subject-color-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.teacher-subject-color-option {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid transparent;
+    position: relative;
+}
+
+.teacher-subject-color-option:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.teacher-subject-color-option.color-selected {
+    border-color: #0f172a;
+    box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.1);
+    transform: scale(1.08);
+}
+
+.teacher-subject-color-option.color-selected::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.teacher-subject-logo-preview {
+    margin-top: 14px;
+    max-width: 140px;
+    max-height: 140px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    padding: 12px;
+    background: #f8fafc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.teacher-subject-logo-preview.hidden {
+    display: none;
+}
+
+/* Modal Actions */
+.teacher-subject-modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.teacher-subject-btn {
+    padding: 13px 26px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.teacher-subject-btn-primary {
+    background: linear-gradient(135deg, #10b981 0%, #14b8a6 50%, #06b6d4 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+}
+
+.teacher-subject-btn-primary:hover {
+    background: linear-gradient(135deg, #059669 0%, #0d9488 50%, #0891b2 100%);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+    transform: translateY(-1px);
+}
+
+.teacher-subject-btn-primary:active {
+    transform: translateY(0);
+}
+
+.teacher-subject-btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.teacher-subject-btn-text {
+    background: #f8fafc;
+    color: #475569;
+    border: 1.5px solid #e2e8f0;
+}
+
+.teacher-subject-btn-text:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+    border-color: #cbd5e1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .teacher-subjects-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .teacher-subject-floating-btn {
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
+        font-size: 22px;
+    }
+
+    .teacher-subject-modal-content {
+        padding: 28px;
+    }
+
+    .teacher-subject-modal-content h2 {
+        font-size: 22px;
+    }
+
+    .teacher-subject-color-options {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    .teacher-subject-card-actions {
+        flex-direction: column;
+    }
+
+    .teacher-subject-info-cards {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .teacher-subject-card-banner {
+        padding: 24px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .teacher-subjects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .teacher-subject-modal-content {
+        padding: 24px;
+    }
+
+    .teacher-subject-card-banner img {
+        width: 56px;
+        height: 56px;
+    }
+}
+
+/* Smooth Scrollbar for Modal */
+.teacher-subject-modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.teacher-subject-modal-content::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.teacher-subject-modal-content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.teacher-subject-modal-content::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

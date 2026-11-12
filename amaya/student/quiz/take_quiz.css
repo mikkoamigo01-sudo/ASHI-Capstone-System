@@ -1,0 +1,741 @@
+/* ============================================
+   GOOGLE FORMS-INSPIRED QUIZ DESIGN
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    background-color: #f0ebf8;
+    color: #202124;
+    line-height: 1.6;
+    padding: 20px 0;
+}
+
+/* ============================================
+   QUIZ CONTAINER
+   ============================================ */
+
+.quiz-container {
+    max-width: 770px;
+    margin: 0 auto;
+    padding: 0 12px;
+}
+
+/* ============================================
+   QUIZ HEADER (Google Forms Style)
+   ============================================ */
+
+.quiz-header {
+    background-color: #6200ea;
+    border-radius: 8px 8px 0 0;
+    padding: 0;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+}
+
+.header-top {
+    padding: 26px 24px;
+    border-top: 10px solid rgba(0,0,0,0.2);
+    border-radius: 8px 8px 0 0;
+}
+
+.quiz-title {
+    font-size: 32px;
+    font-weight: 400;
+    color: white;
+    margin-bottom: 8px;
+    letter-spacing: 0;
+}
+
+.quiz-subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,0.9);
+    font-weight: 400;
+}
+
+/* Timer Container */
+.timer-container {
+    background: rgba(0,0,0,0.1);
+    padding: 12px 24px;
+}
+
+.timer-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.timer-content i {
+    font-size: 16px;
+}
+
+#timerDisplay {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.timer-label {
+    opacity: 0.9;
+}
+
+.timer-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.timer-progress {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    transition: width 1s linear;
+}
+
+/* ============================================
+   QUIZ BODY
+   ============================================ */
+
+.quiz-body {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+}
+
+/* ============================================
+   INSTRUCTIONS CARD
+   ============================================ */
+
+.instructions-card {
+    text-align: center;
+}
+
+.description-section {
+    margin-bottom: 24px;
+}
+
+.description-text {
+    font-size: 14px;
+    color: #5f6368;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.section-divider {
+    height: 1px;
+    background: #dadce0;
+    margin: 24px 0;
+}
+
+/* Info Grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.info-item {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.info-icon {
+    width: 40px;
+    height: 40px;
+    background: #e8eaed;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.info-icon i {
+    font-size: 18px;
+    color: #5f6368;
+}
+
+.info-content {
+    flex: 1;
+}
+
+.info-label {
+    font-size: 12px;
+    color: #5f6368;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    font-size: 20px;
+    font-weight: 500;
+    color: #202124;
+}
+
+/* Previous Score */
+.previous-score {
+    background: #e8f0fe;
+    border-left: 4px solid #1a73e8;
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: #174ea6;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.previous-score i {
+    font-size: 16px;
+}
+
+.previous-score strong {
+    font-weight: 500;
+}
+
+/* Instructions List */
+.instructions-list {
+    text-align: left;
+    margin-bottom: 32px;
+}
+
+.instructions-list h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #202124;
+    margin-bottom: 16px;
+}
+
+.instructions-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.instructions-list li {
+    padding: 8px 0;
+    color: #5f6368;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.instructions-list li i {
+    color: #1a73e8;
+    font-size: 16px;
+    width: 20px;
+    flex-shrink: 0;
+}
+
+.instructions-list li i.fa-exclamation-triangle {
+    color: #f9ab00;
+}
+
+/* Start Button */
+.btn-start {
+    width: 100%;
+    max-width: 200px;
+    padding: 12px 24px;
+    background: #6200ea;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+    margin-bottom: 16px;
+}
+
+.btn-start:hover {
+    background: #5200c6;
+    box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+}
+
+.btn-start:active {
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+}
+
+.btn-back-link {
+    display: inline-block;
+    color: #6200ea;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 0;
+}
+
+.btn-back-link:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   QUESTION CARDS (Google Forms Style)
+   ============================================ */
+
+.question-card {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 12px;
+    border: 1px solid #dadce0;
+    transition: border-color 0.2s;
+}
+
+.question-card:hover {
+    border-color: #6200ea;
+}
+
+.question-card:focus-within {
+    border-color: #6200ea;
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.question-number {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6200ea;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.question-points {
+    font-size: 12px;
+    color: #5f6368;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #f1f3f4;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.question-points i {
+    font-size: 11px;
+}
+
+.question-text {
+    font-size: 16px;
+    color: #202124;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+/* ============================================
+   OPTIONS (Google Forms Radio Style)
+   ============================================ */
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    position: relative;
+}
+
+.option-item:hover {
+    background: #f8f9fa;
+    border-color: #5f6368;
+}
+
+.option-item input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.option-circle {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #5f6368;
+    border-radius: 50%;
+    margin-right: 16px;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.option-item input[type="radio"]:checked ~ .option-circle {
+    border-color: #6200ea;
+}
+
+.option-item input[type="radio"]:checked ~ .option-circle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: #6200ea;
+    border-radius: 50%;
+}
+
+.option-item input[type="radio"]:checked ~ .option-text {
+    color: #6200ea;
+    font-weight: 500;
+}
+
+.option-text {
+    flex: 1;
+    font-size: 14px;
+    color: #202124;
+    line-height: 1.5;
+}
+
+/* ============================================
+   TEXT INPUTS (Google Forms Style)
+   ============================================ */
+
+.text-answer-container {
+    margin-top: 16px;
+}
+
+.text-answer-label {
+    display: block;
+    font-size: 14px;
+    color: #5f6368;
+    margin-bottom: 12px;
+    font-weight: 400;
+}
+
+.text-input,
+.text-area {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-bottom: 1px solid #dadce0;
+    font-size: 14px;
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    color: #202124;
+    background: transparent;
+    transition: border-color 0.2s;
+    resize: none;
+}
+
+.text-input:focus,
+.text-area:focus {
+    outline: none;
+    border-bottom: 2px solid #6200ea;
+    background: #f8f9fa;
+}
+
+.text-area {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.text-input::placeholder,
+.text-area::placeholder {
+    color: #80868b;
+}
+
+/* ============================================
+   SUBMIT SECTION
+   ============================================ */
+
+.submit-section {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    margin-top: 12px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+    text-align: center;
+}
+
+.btn-submit {
+    padding: 12px 32px;
+    background: #6200ea;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+    margin-bottom: 12px;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background: #5200c6;
+    box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+}
+
+.btn-submit:disabled {
+    background: #dadce0;
+    color: #80868b;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.submit-note {
+    font-size: 12px;
+    color: #5f6368;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.submit-note i {
+    font-size: 14px;
+}
+
+/* ============================================
+   COMPLETED MESSAGE
+   ============================================ */
+
+.completed-message {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.completed-icon {
+    width: 80px;
+    height: 80px;
+    background: #e8f5e9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+}
+
+.completed-icon i {
+    font-size: 40px;
+    color: #1e8e3e;
+}
+
+.completed-message h2 {
+    font-size: 24px;
+    font-weight: 400;
+    color: #202124;
+    margin-bottom: 12px;
+}
+
+.completed-message p {
+    font-size: 14px;
+    color: #5f6368;
+    margin-bottom: 24px;
+}
+
+.best-score-display {
+    background: #e8f0fe;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 32px;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.score-label {
+    font-size: 12px;
+    color: #174ea6;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.score-percentage {
+    font-size: 48px;
+    font-weight: 300;
+    color: #1a73e8;
+}
+
+.btn-return {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    background: #6200ea;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+}
+
+.btn-return:hover {
+    background: #5200c6;
+    box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    body {
+        padding: 12px 0;
+    }
+
+    .quiz-container {
+        padding: 0 8px;
+    }
+
+    .header-top {
+        padding: 20px 16px;
+    }
+
+    .quiz-title {
+        font-size: 24px;
+    }
+
+    .quiz-subtitle {
+        font-size: 13px;
+    }
+
+    .quiz-body {
+        padding: 16px;
+    }
+
+    .question-card {
+        padding: 16px;
+    }
+
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .info-item {
+        padding: 12px;
+    }
+
+    .info-value {
+        font-size: 18px;
+    }
+
+    .question-text {
+        font-size: 15px;
+    }
+
+    .option-item {
+        padding: 12px;
+    }
+
+    .btn-start {
+        width: 100%;
+        max-width: none;
+    }
+
+    .submit-section {
+        padding: 16px;
+    }
+
+    .btn-submit {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .quiz-title {
+        font-size: 20px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .score-percentage {
+        font-size: 36px;
+    }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.question-card {
+    animation: slideInDown 0.3s ease-out;
+}
+
+/* Loading State */
+.btn-submit:disabled i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Add this to your take_quiz.css */
+
+.uppercase-notice {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #e53935;
+    margin-left: 8px;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+}

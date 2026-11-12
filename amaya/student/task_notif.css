@@ -1,0 +1,95 @@
+/* ============================================================================
+   TASK BADGE NOTIFICATION STYLES
+   ============================================================================ */
+
+.badge-notification {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: linear-gradient(135deg, #ff4757 0%, #ff6348 100%);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 11px;
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+/* Hide badge when count is 0 */
+.badge-notification[style*="display: none"] {
+    display: none !important;
+}
+
+/* Pulse animation for new tasks */
+@keyframes badge-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+    }
+    50% {
+        transform: scale(1.15);
+        box-shadow: 0 4px 16px rgba(255, 71, 87, 0.6);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+    }
+}
+
+.badge-notification.badge-pulse {
+    animation: badge-pulse 0.6s ease-in-out;
+}
+
+/* Hover effect on menu item with badge */
+.menu-link:hover .badge-notification {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(255, 71, 87, 0.5);
+}
+
+/* Active menu item badge style */
+.menu-link.active .badge-notification {
+    background: linear-gradient(135deg, #ff6348 0%, #ff7f50 100%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .badge-notification {
+        min-width: 20px;
+        height: 20px;
+        font-size: 10px;
+        top: 6px;
+        right: 10px;
+    }
+}
+
+/* Collapsed sidebar badge positioning */
+.sidebar.collapsed .badge-notification {
+    right: 8px;
+    top: 8px;
+}
+
+/* Badge number transition */
+.badge-notification {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* When badge updates, add a brief highlight */
+@keyframes badge-update {
+    0%, 100% {
+        background: linear-gradient(135deg, #ff4757 0%, #ff6348 100%);
+    }
+    50% {
+        background: linear-gradient(135deg, #ffd93d 0%, #ffaa00 100%);
+    }
+}
+
+.badge-notification.badge-updating {
+    animation: badge-update 0.5s ease-in-out;
+}

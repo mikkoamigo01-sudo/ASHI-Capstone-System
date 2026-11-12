@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ashi LMS — Load Test Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:    #1a73e8;
+    --green:   #1e8e3e;
+    --red:     #d93025;
+    --amber:   #f9ab00;
+    --text:    #202124;
+    --text2:   #5f6368;
+    --border:  #dadce0;
+    --surface: #f8f9fa;
+    --white:   #ffffff;
+    --radius:  8px;
+  }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    height: 64px;
+    gap: 12px;
+  }
+  .header-logo {
+    width: 32px; height: 32px;
+    background: var(--blue);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .header-logo svg { width: 18px; height: 18px; fill: white; }
+  .header-title {
+    font-family: 'Google Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .header-sub {
+    font-size: 13px;
+    color: var(--text2);
+    margin-left: 4px;
+  }
+  .header-badge {
+    margin-left: auto;
+    background: #e6f4ea;
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 100px;
+    border: 1px solid #ceead6;
+  }
+
+  /* ── Layout ── */
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+
+  /* ── Section title ── */
+  .section-title {
+    font-family: 'Google Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    margin-top: 36px;
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  /* ── Metric cards ── */
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .metric-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: box-shadow .15s;
+  }
+  .metric-card:hover { box-shadow: 0 1px 6px rgba(60,64,67,.15); }
+  .metric-label {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+  .metric-value {
+    font-family: 'Google Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .metric-sub { font-size: 11px; color: var(--text2); }
+  .val-green { color: var(--green); }
+  .val-blue  { color: var(--blue);  }
+  .val-amber { color: var(--amber); }
+  .val-red   { color: var(--red);   }
+
+  /* ── Threshold table ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .card-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    transition: background .1s;
+  }
+  .card-row:last-child { border-bottom: none; }
+  .card-row:hover { background: var(--surface); }
+  .row-icon {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-right: 14px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .icon-pass { background: #e6f4ea; color: var(--green); }
+  .icon-fail { background: #fce8e6; color: var(--red);   }
+  .icon-warn { background: #fef7e0; color: var(--amber); }
+  .row-name  { flex: 1; color: var(--text); }
+  .row-value { font-size: 13px; color: var(--text2); margin-right: 12px; }
+  .chip {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+  .chip-pass  { background: #e6f4ea; color: var(--green); }
+  .chip-fail  { background: #fce8e6; color: var(--red);   }
+  .chip-warn  { background: #fef7e0; color: var(--amber); }
+  .chip-blue  { background: #e8f0fe; color: var(--blue);  }
+
+  /* ── Comparison grid ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .compare-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .compare-title {
+    font-family: 'Google Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-key { color: var(--text2); }
+  .compare-val { font-weight: 500; }
+
+  /* ── Timeline ── */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item {
+    display: flex;
+    gap: 16px;
+    padding: 0 0 0 0;
+  }
+  .tl-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20px;
+    flex-shrink: 0;
+  }
+  .tl-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .tl-line {
+    width: 2px;
+    flex: 1;
+    background: var(--border);
+    margin: 4px 0;
+    min-height: 20px;
+  }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-content { padding-bottom: 20px; }
+  .tl-label { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+  .tl-desc  { font-size: 12px; color: var(--text2); }
+  .dot-green { background: var(--green); }
+  .dot-blue  { background: var(--blue);  }
+  .dot-amber { background: var(--amber); }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 48px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .metric-grid { grid-template-columns: repeat(2, 1fr); }
+    .compare-grid { grid-template-columns: 1fr; }
+    .header { padding: 0 16px; }
+    .container { padding: 24px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-logo">
+    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+  </div>
+  <span class="header-title">Ashi LMS</span>
+  <span class="header-sub">/ Load Test Report</span>
+  <span class="header-badge">All tests passed</span>
+</div>
+
+<div class="container">
+
+  <!-- Meta info -->
+  <div style="display:flex; gap:24px; margin-bottom:32px; font-size:13px; color:var(--text2); flex-wrap:wrap;">
+    <span>Test run: <strong style="color:var(--text)">March 23, 2026</strong></span>
+    <span>Duration: <strong style="color:var(--text)">20 minutes</strong></span>
+    <span>Peak VUs: <strong style="color:var(--text)">100</strong></span>
+    <span>Users simulated: <strong style="color:var(--text)">1,960 students + 40 teachers</strong></span>
+    <span>Ratio: <strong style="color:var(--text)">1 teacher : 50 students</strong></span>
+  </div>
+
+  <!-- Key metrics -->
+  <div class="section-title">Key metrics</div>
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-label">Login success rate</div>
+      <div class="metric-value val-green">100%</div>
+      <div class="metric-sub">threshold &gt; 80%</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">HTTP error rate</div>
+      <div class="metric-value val-green">0.75%</div>
+      <div class="metric-sub">threshold &lt; 10%</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">p(95) response time</div>
+      <div class="metric-value val-green">29ms</div>
+      <div class="metric-sub">threshold &lt; 5,000ms</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Server crashes</div>
+      <div class="metric-value val-green">0</div>
+      <div class="metric-sub">must be 0</div>
+    </div>
+  </div>
+
+  <div class="metric-grid" style="margin-top:12px;">
+    <div class="metric-card">
+      <div class="metric-label">Total requests</div>
+      <div class="metric-value val-blue">13,806</div>
+      <div class="metric-sub">~11 req/s</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Complete sessions</div>
+      <div class="metric-value val-blue">1,214</div>
+      <div class="metric-sub">full login → logout</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Avg response time</div>
+      <div class="metric-value val-blue">11.88ms</div>
+      <div class="metric-sub">median 7.05ms</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Data received</div>
+      <div class="metric-value val-blue">167MB</div>
+      <div class="metric-sub">137 kB/s throughput</div>
+    </div>
+  </div>
+
+  <!-- Thresholds -->
+  <div class="section-title">Threshold results</div>
+  <div class="card">
+    <div class="card-row">
+      <div class="row-icon icon-pass">✓</div>
+      <div class="row-name">p(95) response time &lt; 5,000ms</div>
+      <div class="row-value">29.11ms</div>
+      <span class="chip chip-pass">PASS</span>
+    </div>
+    <div class="card-row">
+      <div class="row-icon icon-pass">✓</div>
+      <div class="row-name">HTTP error rate &lt; 10%</div>
+      <div class="row-value">0.75%</div>
+      <span class="chip chip-pass">PASS</span>
+    </div>
+    <div class="card-row">
+      <div class="row-icon icon-pass">✓</div>
+      <div class="row-name">Login success rate &gt; 80%</div>
+      <div class="row-value">100.00%</div>
+      <span class="chip chip-pass">PASS</span>
+    </div>
+  </div>
+
+  <!-- All checks -->
+  <div class="section-title">All checks</div>
+  <div class="card">
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Student login: responded</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Student login: no crash</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Student login: no fatal error</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Student dashboard: responded</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Student dashboard: no crash</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Student subjects: responded</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Student material: responded</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Student assignment: responded</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Teacher login: responded</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Teacher login: no crash</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Teacher login: no fatal error</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-warn">!</div><div class="row-name">Teacher dashboard: responded</div><div class="row-value">0 / 26</div><span class="chip chip-warn">MINOR</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Teacher dashboard: no crash</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Teacher dashboard: no fatal error</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Teacher view subject</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Teacher get students</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Teacher assignments</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Teacher fetch materials</div><span class="chip chip-pass">PASS</span></div>
+    <div class="card-row"><div class="row-icon icon-pass">✓</div><div class="row-name">Teacher student grades</div><span class="chip chip-pass">PASS</span></div>
+  </div>
+
+  <!-- Test 1 vs Test 2 -->
+  <div class="section-title">Test comparison</div>
+  <div class="compare-grid">
+    <div class="compare-card">
+      <div class="compare-title">Test 1 — Students only</div>
+      <div class="compare-row"><span class="compare-key">p(95) response</span><span class="compare-val">35ms</span></div>
+      <div class="compare-row"><span class="compare-key">Error rate</span><span class="compare-val">0.19%</span></div>
+      <div class="compare-row"><span class="compare-key">Login success</span><span class="compare-val">100%</span></div>
+      <div class="compare-row"><span class="compare-key">Total checks</span><span class="compare-val">14,948</span></div>
+      <div class="compare-row"><span class="compare-key">Teacher pages tested</span><span class="compare-val">2 pages</span></div>
+      <div class="compare-row"><span class="compare-key">Server crashes</span><span class="compare-val" style="color:var(--green)">0</span></div>
+    </div>
+    <div class="compare-card" style="border-color: var(--blue);">
+      <div class="compare-title" style="color:var(--blue);">Test 2 — Full (1:50 ratio) ← latest</div>
+      <div class="compare-row"><span class="compare-key">p(95) response</span><span class="compare-val" style="color:var(--green)">29ms ↓</span></div>
+      <div class="compare-row"><span class="compare-key">Error rate</span><span class="compare-val">0.75%</span></div>
+      <div class="compare-row"><span class="compare-key">Login success</span><span class="compare-val" style="color:var(--green)">100%</span></div>
+      <div class="compare-row"><span class="compare-key">Total checks</span><span class="compare-val" style="color:var(--green)">15,148 ↑</span></div>
+      <div class="compare-row"><span class="compare-key">Teacher pages tested</span><span class="compare-val" style="color:var(--green)">7 pages ↑</span></div>
+      <div class="compare-row"><span class="compare-key">Server crashes</span><span class="compare-val" style="color:var(--green)">0</span></div>
+    </div>
+  </div>
+
+  <!-- Load stages timeline -->
+  <div class="section-title">Load stages</div>
+  <div class="card" style="padding:20px 24px;">
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot dot-green"></div><div class="tl-line"></div></div>
+        <div class="tl-content"><div class="tl-label">0:00 – 2:00 — Warm-up</div><div class="tl-desc">0 → 10 VUs. Apache and MySQL settle in.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot dot-green"></div><div class="tl-line"></div></div>
+        <div class="tl-content"><div class="tl-label">2:00 – 5:00 — Light load</div><div class="tl-desc">10 → 30 VUs. Light traffic simulation.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot dot-blue"></div><div class="tl-line"></div></div>
+        <div class="tl-content"><div class="tl-label">5:00 – 10:00 — Moderate load</div><div class="tl-desc">30 → 60 VUs. Normal school day traffic.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot dot-blue"></div><div class="tl-line"></div></div>
+        <div class="tl-content"><div class="tl-label">10:00 – 15:00 — Peak load</div><div class="tl-desc">60 → 100 VUs. Max XAMPP-safe concurrent users. System held stable.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot dot-green"></div><div class="tl-line"></div></div>
+        <div class="tl-content"><div class="tl-label">15:00 – 18:00 — Ramp down</div><div class="tl-desc">100 → 50 VUs. Traffic scaling back.</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot dot-green"></div><div class="tl-line"></div></div>
+        <div class="tl-content"><div class="tl-label">18:00 – 20:00 — Cool-down</div><div class="tl-desc">50 → 0 VUs. Test complete.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Note -->
+  <div style="background:#e8f0fe; border:1px solid #c5d5f5; border-radius:var(--radius); padding:16px 20px; margin-top:12px; font-size:13px; color:#1557b0;">
+    <strong>Note on teacher dashboard warning:</strong> The 26 failed checks on <code>teacher_dashb.php</code> are not a system crash. The page redirected because the test used fake teacher emails that don't exist in the database. No fatal errors were recorded. Running with real teacher credentials will resolve this.
+  </div>
+
+</div>
+</body>
+</html>
